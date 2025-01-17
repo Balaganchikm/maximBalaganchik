@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { View, Text, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { useTheme } from '../ThemeContext'; // Import your ThemeContext
+import { useTheme } from '../ThemeContext'; 
 
 const Lab3 = () => {
-    const { isDarkMode } = useTheme(); // Use the theme context to get the current theme
+    const { isDarkMode } = useTheme(); 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -69,7 +69,7 @@ const Lab3 = () => {
         setTimerEnabled(!timerEnabled);
     };
 
-    const themeStyles = isDarkMode ? styles.dark : styles.light; // Conditional styles for dark/light mode
+    const themeStyles = isDarkMode ? styles.dark : styles.light; 
 
     if (loading)
         return (

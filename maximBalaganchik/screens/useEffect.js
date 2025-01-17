@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ActivityIndicator, FlatList, StyleSheet } from "react-native";
-import { useTheme } from '../ThemeContext'; // Import ThemeContext
+import { useTheme } from '../ThemeContext'; 
 
 const FetchDataExample = () => {
-    const { isDarkMode } = useTheme(); // Use the theme context to get current theme
+    const { isDarkMode } = useTheme(); 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -102,12 +102,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     light: {
-        backgroundColor: "#f5f5f5", // Light mode background
-        color: "#000", // Light mode text color
+        backgroundColor: "#f5f5f5", 
+        color: "#000", 
     },
     dark: {
-        backgroundColor: "#333", // Dark mode background
-        color: "#fff", // Dark mode text color
+        backgroundColor: "#333", 
+        color: "#fff", 
     },
     text: {
         fontSize: 16,

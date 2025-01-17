@@ -1,18 +1,18 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import {  useTheme } from '../ThemeContext'; // Import your ThemeContext
+import {  useTheme } from '../ThemeContext'; 
 
-// Function to display the content
+
 const AppContent = () => {
     const { isDarkMode } = useTheme();
-    const [ count, setCount ] = useState(0); // Initialize state for counter
+    const [ count, setCount ] = useState(0); 
 
-    // Function to increment the counter
+    
     const increment = () => {
         setCount(count + 1);
     };
 
-    // Apply the dark mode styles conditionally
+    
     const themeStyles = isDarkMode ? styles.dark : styles.light;
 
     return (
@@ -25,7 +25,7 @@ const AppContent = () => {
     );
 };
 
-// Main App component with ThemeProvider wrapping AppContent
+
 const App = () => {
     return (
         
@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     light: {
-        backgroundColor: '#f5fcff', // Light background
+        backgroundColor: '#f5fcff', 
     },
     dark: {
-        backgroundColor: '#333', // Dark background
+        backgroundColor: '#333', 
     },
     text: {
         fontSize: 20,
