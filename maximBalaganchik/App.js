@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import Lab1 from "./screens/use-state";
-import Lab2 from "./screens/use-effect";
-import Lab3 from "./screens/use-memo";
+import Lab1 from "./screens/useState";
+import Lab2 from "./screens/useEffect";
+import Lab3 from "./screens/useMemo";
 import { View, Text, Button, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
 import { ThemeProvider, useTheme } from './ThemeContext';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -24,7 +24,7 @@ function AppContent() {
                     if (route.name === 'Lab1') {
                         iconName = focused ? 'flask' : 'flask-outline';
                     } else if (route.name === 'Lab2') {
-                        iconName = focused ? 'happy' : 'happy-outline';
+                        iconName = focused ? 'information-circle' : 'information-circle-outline';
                     } else if (route.name === 'Lab3') {
                         iconName = focused ? 'stats-chart' : 'stats-chart-outline';
                     } else if (route.name === 'Lab4') {
