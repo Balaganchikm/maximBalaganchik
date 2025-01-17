@@ -6,6 +6,7 @@ import Lab2 from "./screens/use-effect";
 import Lab3 from "./screens/use-memo";
 import { View, Text, Button, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
 import { ThemeProvider, useTheme } from './ThemeContext';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +17,33 @@ function AppContent() {
 
     return (
         <NavigationContainer>
-            <Tab.Navigator>
+            <Tab.Navigator screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+
+                    if (route.name === 'Lab1') {
+                        iconName = focused ? 'flask' : 'flask-outline';
+                    } else if (route.name === 'Lab2') {
+                        iconName = focused ? 'happy' : 'happy-outline';
+                    } else if (route.name === 'Lab3') {
+                        iconName = focused ? 'stats-chart' : 'stats-chart-outline';
+                    } else if (route.name === 'Lab4') {
+                        iconName = focused ? 'moon' : 'moon-outline';
+                    }
+
+                    return <Icon name={iconName} size={size} color={color} />;
+                },
+                tabBarStyle: {
+                    backgroundColor: isDarkMode ? '#1a1a1a' : '#f9f9f9',
+                    borderTopWidth: 0,
+                },
+                headerStyle: {
+                    backgroundColor: isDarkMode ? '#1a1a1a' : '#f9f9f9',
+                    elevation: 0,
+                },
+                headerTintColor: isDarkMode ? '#fff' : '#000',
+            })}>
+                
                 <Tab.Screen name="Lab1" component={Lab1} />
                 <Tab.Screen name="Lab2" component={Lab2} />
                 <Tab.Screen name="Lab3" component={Lab3} />
