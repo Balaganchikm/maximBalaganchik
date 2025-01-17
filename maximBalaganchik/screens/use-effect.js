@@ -1,62 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import { useTheme } from '../ThemeContext'; // Import ThemeContext
 
 const FetchDataExample = () => {
+    const { isDarkMode } = useTheme(); // Use the theme context to get current theme
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Функция для выполнения запроса к API
         const fetchData = async () => {
             try {
-                setLoading(true); // Показываем индикатор загрузки
-                const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // Замените URL на ваш API
+                setLoading(true);
+                const response = await fetch("https://jsonplaceholder.typicode.com/posts");
                 if (!response.ok) {
                     throw new Error(`Ошибка: ${response.status}`);
                 }
                 const result = await response.json();
-                setData(result); // Сохраняем данные
+                setData(result);
             } catch (err) {
-                setError(err.message); // Обрабатываем ошибку
+                setError(err.message);
             } finally {
-                setLoading(false); // Скрываем индикатор загрузки
+                setLoading(false);
             }
         };
 
         fetchData();
-    }, []); // Пустой массив зависимостей — эффект выполнится только при монтировании
+    }, []);
 
-    // Отображение индикатора загрузки
+    const themeStyles = isDarkMode ? styles.dark : styles.light;
+
     if (loading) {
         return (
-            <View style={styles.centered}>
+            <View style={[styles.centered, themeStyles]}>
                 <ActivityIndicator size="large" color="#0000ff" />
-                <Text>Загрузка данных...</Text>
+                <Text style={[styles.text, { color: isDarkMode ? '#fff' : '#000' }]}>Загрузка данных...</Text>
             </View>
         );
     }
 
-    // Отображение сообщения об ошибке
     if (error) {
         return (
-            <View style={styles.centered}>
-                <Text style={styles.errorText}>Ошибка: {error}</Text>
+            <View style={[styles.centered, themeStyles]}>
+                <Text style={[styles.errorText, { color: isDarkMode ? '#fff' : '#000' }]}>Ошибка: {error}</Text>
             </View>
         );
     }
 
-    // Отображение данных
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Список данных:</Text>
+        <View style={[styles.container, themeStyles]}>
+            <Text style={[styles.title, { color: isDarkMode ? '#fff' : '#000' }]}>Список данных:</Text>
             <FlatList
                 data={data}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <View style={styles.item}>
-                        <Text style={styles.itemTitle}>{item.title}</Text>
-                        <Text style={styles.itemBody}>{item.body}</Text>
+                    <View style={[styles.item, themeStyles]}>
+                        <Text style={[styles.itemTitle, { color: isDarkMode ? '#fff' : '#000' }]}>{item.title}</Text>
+                        <Text style={[styles.itemBody, { color: isDarkMode ? '#fff' : '#000' }]}>{item.body}</Text>
                     </View>
                 )}
             />
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: "#f5f5f5",
     },
     centered: {
         flex: 1,
@@ -100,6 +99,17 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: "red",
+        fontSize: 16,
+    },
+    light: {
+        backgroundColor: "#f5f5f5", // Light mode background
+        color: "#000", // Light mode text color
+    },
+    dark: {
+        backgroundColor: "#333", // Dark mode background
+        color: "#fff", // Dark mode text color
+    },
+    text: {
         fontSize: 16,
     },
 });

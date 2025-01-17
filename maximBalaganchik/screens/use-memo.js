@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { View, Text, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { useTheme } from '../ThemeContext'; // Import your ThemeContext
 
 const Lab3 = () => {
+    const { isDarkMode } = useTheme(); // Use the theme context to get the current theme
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,25 +12,22 @@ const Lab3 = () => {
     const [fetchTime, setFetchTime] = useState(null);
     const [memoTime, setMemoTime] = useState(null);
 
-
     const fetchData = useCallback(async () => {
         setLoading(true);
-        const startTime = timerEnabled ? performance.now() : null; 
+        const startTime = timerEnabled ? performance.now() : null;
 
         try {
-            const response = await fetch(
-                "https://api.coindesk.com/v1/bpi/currentprice.json"
-            );
+            const response = await fetch("https://api.coindesk.com/v1/bpi/currentprice.json");
             if (!response.ok) {
                 throw new Error(`Network response was not ok, status: ${response.status}`);
             }
             const result = await response.json();
             setData(result);
             setError(null);
-            if(timerEnabled && startTime){
+            if (timerEnabled && startTime) {
                 const endTime = performance.now();
-                setFetchTime(endTime - startTime); 
-             }
+                setFetchTime(endTime - startTime);
+            }
         } catch (err) {
             setError(err);
             setData(null);
@@ -43,141 +42,98 @@ const Lab3 = () => {
     }, [fetchData]);
 
     const processedData = useMemo(() => {
-         const startTime = timerEnabled ? performance.now() : null; 
+        const startTime = timerEnabled ? performance.now() : null;
         let result;
         if (!data || !useMemoEnabled) {
-          let processed = data ? { updated: data?.time?.updated, rates: data?.bpi } : null
-            if(processed) {
-               for(let i = 0; i<10000; i++){
-                   let _ = Math.random()
-               }
+            let processed = data ? { updated: data?.time?.updated, rates: data?.bpi } : null
+            if (processed) {
+                for (let i = 0; i < 10000; i++) {
+                    let _ = Math.random();
+                }
             }
-           result = processed
+            result = processed;
         } else {
-            result = {
-                updated: data.time?.updated,
-                rates: data.bpi,
-            };
+            result = { updated: data.time?.updated, rates: data.bpi };
         }
-          if(timerEnabled && startTime){
-                const endTime = performance.now();                
-                setMemoTime(endTime - startTime);  
-              }
+        if (timerEnabled && startTime) {
+            const endTime = performance.now();
+            setMemoTime(endTime - startTime);
+        }
         return result;
-     }, [data, useMemoEnabled, timerEnabled]); 
- 
- 
-     const toggleUseMemo = () => {
-         setUseMemoEnabled(!useMemoEnabled);
-     };
-      const toggleTimer = () => {
-         setTimerEnabled(!timerEnabled);
-     };
- 
- 
-     if (loading)
-         return (
-             <View style={styles.loaderContainer}>
-                 <ActivityIndicator size="large" color="#00ff00" />
-             </View>
-         );
-     if (error)
-         return (
-             <View style={styles.errorContainer}>
-                 <Text style={styles.errorText}>Error: {error?.message}</Text>
-             </View>
-         );
- 
-     if (!processedData) {
-         return (<View style={styles.container}>
-             <Text style={[styles.title, { color: "#000" }]}>
-                 Lab 2
-             </Text>
-             <Text
-                 style={[
-                     styles.subtitle,
-                     { color: "#666" },
-                 ]}
-             >Loading data...
-             </Text>
-         </View>);
- 
-     }
- 
- 
-     return (
-         <View
-             style={[
-                 styles.container,
-                 { backgroundColor: "#fff" },
-             ]}
-         >
-             <Text style={[styles.title, { color: "#000" }]}>
-                 Lab 3
-             </Text>
-             <Text
-                 style={[
-                     styles.subtitle,
-                     { color: "#666" },
-                 ]}
-             >
-                 Current Bitcoin Prices
-             </Text>
-             <Text
-                 style={[
-                     styles.updatedText,
-                     { color: "#000" },
-                 ]}
-             >
-                 Last updated: {processedData?.updated}
-             </Text>
-              {timerEnabled && (
-                 <Text style={[styles.timerText, { color: "#000" }]}>
-                      Fetch Time: {fetchTime !== null ? `${fetchTime.toFixed(2)} ms` : 'Loading...'}
-                 </Text>
-              )}
-              {timerEnabled && (
-                  <Text style={[styles.timerText, { color: "#000" }]}>
-                  Memo Time (UseMemo {useMemoEnabled ? "On" : "Off"}): {memoTime !== null ? `${memoTime.toFixed(2)} ms` : 'Loading...'}
-              </Text>
-          )}
-          <View style={styles.buttonsContainer}>
-              <TouchableOpacity style={styles.button} onPress={fetchData}>
-                  <Text style={styles.buttonText}>Обновить</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={toggleUseMemo}>
-                  <Text style={styles.buttonText}>
-                      {useMemoEnabled ? "Выключить useMemo" : "Включить useMemo"}
-                  </Text>
-              </TouchableOpacity>
-          </View>
-          <FlatList
-              data={Object.entries(processedData.rates)}
-              keyExtractor={([currency]) => currency}
-              renderItem={({ item }) => {
-                  const [currency, info] = item;
-                  return (
-                      <View
-                          style={[
-                              styles.rateContainer,{
-                                backgroundColor: "#e0e0e0",
-                            },
-                        ]}
-                    >
-                        <Text
-                            style={[
-                                styles.rateText,
-                                { color: "#000" },
-                            ]}
-                        >
-                            {info.code}: {info.rate}
-                        </Text>
-                    </View>
-                );
-            }}
-        />
-    </View>
-);
+    }, [data, useMemoEnabled, timerEnabled]);
+
+    const toggleUseMemo = () => {
+        setUseMemoEnabled(!useMemoEnabled);
+    };
+    const toggleTimer = () => {
+        setTimerEnabled(!timerEnabled);
+    };
+
+    const themeStyles = isDarkMode ? styles.dark : styles.light; // Conditional styles for dark/light mode
+
+    if (loading)
+        return (
+            <View style={[styles.loaderContainer, themeStyles]}>
+                <ActivityIndicator size="large" color="#00ff00" />
+            </View>
+        );
+    if (error)
+        return (
+            <View style={[styles.errorContainer, themeStyles]}>
+                <Text style={[styles.errorText, { color: isDarkMode ? '#fff' : '#000' }]}>Error: {error?.message}</Text>
+            </View>
+        );
+
+    if (!processedData) {
+        return (
+            <View style={[styles.container, themeStyles]}>
+                <Text style={[styles.title, { color: isDarkMode ? '#fff' : '#000' }]}>Lab 3</Text>
+                <Text style={[styles.subtitle, { color: isDarkMode ? '#fff' : '#000' }]}>Loading data...</Text>
+            </View>
+        );
+    }
+
+    return (
+        <View style={[styles.container, themeStyles]}>
+            <Text style={[styles.title, { color: isDarkMode ? '#fff' : '#000' }]}>Lab 3</Text>
+            <Text style={[styles.subtitle, { color: isDarkMode ? '#fff' : '#000' }]}>Current Bitcoin Prices</Text>
+            <Text style={[styles.updatedText, { color: isDarkMode ? '#fff' : '#000' }]}>Last updated: {processedData?.updated}</Text>
+            {timerEnabled && (
+                <Text style={[styles.timerText, { color: isDarkMode ? '#fff' : '#000' }]}>
+                    Fetch Time: {fetchTime !== null ? `${fetchTime.toFixed(2)} ms` : 'Loading...'}
+                </Text>
+            )}
+            {timerEnabled && (
+                <Text style={[styles.timerText, { color: isDarkMode ? '#fff' : '#000' }]}>
+                    Memo Time (UseMemo {useMemoEnabled ? "On" : "Off"}): {memoTime !== null ? `${memoTime.toFixed(2)} ms` : 'Loading...'}
+                </Text>
+            )}
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity style={styles.button} onPress={fetchData}>
+                    <Text style={styles.buttonText}>Обновить</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={toggleUseMemo}>
+                    <Text style={styles.buttonText}>
+                        {useMemoEnabled ? "Выключить useMemo" : "Включить useMemo"}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <FlatList
+                data={Object.entries(processedData.rates)}
+                keyExtractor={([currency]) => currency}
+                renderItem={({ item }) => {
+                    const [currency, info] = item;
+                    return (
+                        <View style={[styles.rateContainer, themeStyles]}>
+                            <Text style={[styles.rateText, { color: isDarkMode ? '#fff' : '#000' }]}>
+                                {info.code}: {info.rate}
+                            </Text>
+                        </View>
+                    );
+                }}
+            />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -248,10 +204,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     button: {
+        backgroundColor: '#ccaa40',
         flex: 1,
         paddingVertical: 15,
         marginHorizontal: 5,
-        backgroundColor: "#007bff",
         borderRadius: 8,
         alignItems: "center",
         justifyContent: "center",
@@ -270,6 +226,14 @@ const styles = StyleSheet.create({
         color: "#555",
         textAlign: "center",
         marginBottom: 5,
+    },
+    light: {
+        backgroundColor: "#f9f9f9",
+        color: "#000",
+    },
+    dark: {
+        backgroundColor: "#333",
+        color: "#fff",
     },
 });
 
