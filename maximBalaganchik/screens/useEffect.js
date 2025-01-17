@@ -102,12 +102,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     light: {
-        backgroundColor: "#f5f5f5", // Light mode background
-        color: "#000", // Light mode text color
+        backgroundColor: "#f5f5f5", 
+        color: "#000", 
     },
     dark: {
-        backgroundColor: "#333", // Dark mode background
-        color: "#fff", // Dark mode text color
+        backgroundColor: "#333", 
+        color: "#fff", 
     },
     text: {
         fontSize: 16,
